@@ -94,8 +94,8 @@ highest_num = 0
 
 while running:
     for event in pg.event.get():
-            if event.type==pg.QUIT:
-                running=False
+        if event.type==pg.QUIT:
+            running=False
     keys = pg.key.get_pressed()
     on_ground = False
     for index, i in enumerate(block_group_list):
@@ -108,7 +108,7 @@ while running:
                 if a.rect.y > highest_num:
                     highest_num = a.rect.y
             i.rect.y = highest_num - 240
-            i.rect.x = randint(0, 500)
+            i.rect.x = randint(0, 450)
             dest_y = ref.rect.y + 360
             if jumping == False and falling == False:
                 jumping = True
@@ -117,12 +117,6 @@ while running:
         else:
             if on_ground == False:
                 falling = True
-    # if index_num != '':
-    #     block_group_list.pop(index_num)
-    #     for a in block_group_list:
-    #         a.rect.y += 4  
-        # index_num = ''
-
     screen.fill(BLACK)
     screen.blit(BackGround.image, BackGround.rect)
 
@@ -188,5 +182,21 @@ while running:
 
     clock.tick(fps)
 
+while player.rect.y < HEIGHT:
+    player.rect.y +=2
+    screen.fill(BLACK)
+    screen.blit(BackGround.image, BackGround.rect)
+    sprite_list.draw(screen)
+    block_list.draw(screen)
+    pg.display.update()
 
+screen.fill(BLACK)
+textsurface = myfont.render("Final Score: " + str(high_score), True, (WHITE))
+screen.blit(textsurface,(150, 220))
+pg.display.update()
+running = True
+while running:
+    for event in pg.event.get():
+        if event.type==pg.QUIT:
+            running=False
 pg.quit()
