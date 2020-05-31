@@ -60,7 +60,7 @@ block_group_list.append(enemy)
 block_group_list.append(enemy_1)
 
 ref = Player(GREEN, 25, 5)
-ref.rect.x = 200
+ref.rect.x = 700
 ref.rect.y = 100
 block_list.add(ref)
 block_group_list.append(ref)
@@ -105,7 +105,7 @@ while running:
                     highest_num = a.rect.y
             i.rect.y = highest_num - 240
             i.rect.x = randint(0, 500)
-            dest_y = ref.rect.y + 100
+            dest_y = ref.rect.y + 360
             if jumping == False and falling == False:
                 jumping = True
             on_ground = True
