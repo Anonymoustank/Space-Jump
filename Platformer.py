@@ -1,5 +1,4 @@
 import pygame as pg
-import time
 from random import randint
 GREEN = (20, 255, 140)
 GREY = (210, 210 ,210)
@@ -12,6 +11,9 @@ pg.init()
 WIDTH = 500
 HEIGHT = 500
 screen = pg.display.set_mode((WIDTH, HEIGHT))
+pg.display.set_caption("Game")
+
+myfont = pg.font.SysFont('verdana', 25)
 
 running = True
 
@@ -37,6 +39,9 @@ class Player(pg.sprite.Sprite):
         # Fetch the rectangle object that has the dimensions of the image.
         self.rect = self.image.get_rect()
         self.rect.center = (int(width/2), int(height/2))
+
+high_score = 0
+score = 0
 
 block_group_list = []
 
@@ -66,7 +71,6 @@ block_list.add(ref)
 block_group_list.append(ref)
 
 sprite_list = pg.sprite.Group()
-time.sleep(0.5)
 
 falling = False
 
@@ -129,13 +133,14 @@ while running:
         for i in block_group_list:
             i.rect.y -= 4
             dest_y = ref.rect.y
+        score -= 4
         
 
     if len(block_group_list) != 0:
         if ref.rect.y != dest_y:
-            print(ref.rect.y, dest_y)
             for i in block_group_list:
                 i.rect.y += 4
+            score += 4
         else:
             jumping = False
             
@@ -143,22 +148,25 @@ while running:
         if jumping == False:
             running = False
     
+    if score > high_score:
+        high_score = score
+
+    if abs(score - high_score) > 300:
+        running = False
+
     screen.fill(BLACK)
     screen.blit(BackGround.image, BackGround.rect)
 
     sprite_list.draw(screen)
     block_list.draw(screen)
+
+    textsurface = myfont.render(str(high_score), True, (WHITE))
+    screen.blit(textsurface,(0,0))
 
     if keys[pg.K_LEFT]:
         player.rect.x -= 10
     if keys[pg.K_RIGHT]:
         player.rect.x += 10
-
-    screen.fill(BLACK)
-    screen.blit(BackGround.image, BackGround.rect)
-
-    sprite_list.draw(screen)
-    block_list.draw(screen)
 
     if player.rect.left > WIDTH:
         player.rect.right = 0
@@ -172,6 +180,9 @@ while running:
 
     sprite_list.draw(screen)
     block_list.draw(screen)
+
+    textsurface = myfont.render(str(high_score), True, (WHITE))
+    screen.blit(textsurface,(0,0))
 
     pg.display.update()
 
