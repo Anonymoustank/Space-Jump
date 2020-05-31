@@ -91,11 +91,11 @@ def main():
 
     BackGround = Background('space.jpg', [0,0])
 
-    index_num = ''
-
     highest_num = 0
 
-    tab_exit = False
+    tab_exit = False #checks to see if the player exited the while loop by dying or hitting the exit button
+
+    can_move = False #ensures that the player can't move before hitting the first platform
 
     while running:
         for event in pg.event.get():
@@ -104,12 +104,12 @@ def main():
                 tab_exit = True
         keys = pg.key.get_pressed()
         on_ground = False
-        for index, i in enumerate(block_group_list):
+        for i in block_group_list:
             if abs(player.rect.x - i.rect.x) <= 20 and abs(player.rect.y - i.rect.y) <= 25:
+                can_move = True
                 falling = False
                 if ref.rect.y == dest_y:
                     jumping = False
-                index_num = index
                 for a in block_group_list:
                     if a.rect.y > highest_num:
                         highest_num = a.rect.y
@@ -164,10 +164,11 @@ def main():
         textsurface = myfont.render(str(high_score), True, (WHITE))
         screen.blit(textsurface,(0,0))
 
-        if keys[pg.K_LEFT] or keys[pg.K_a]:
-            player.rect.x -= 10
-        if keys[pg.K_RIGHT] or keys[pg.K_d]:
-            player.rect.x += 10
+        if can_move == True:
+            if keys[pg.K_LEFT] or keys[pg.K_a]:
+                player.rect.x -= 10
+            if keys[pg.K_RIGHT] or keys[pg.K_d]:
+                player.rect.x += 10
 
         if player.rect.left > WIDTH:
             player.rect.right = 0
