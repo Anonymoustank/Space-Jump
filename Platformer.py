@@ -138,12 +138,24 @@ def main():
 
         if len(block_group_list) != 0:
             if ref.rect.y != dest_y:
-                for i in block_group_list:
-                    i.rect.y += 4
-                score += 4
+                if abs(ref.rect.y - dest_y) >= 120:
+                    for i in block_group_list:
+                        i.rect.y += 4
+                    score += 4
+                elif abs(ref.rect.y - dest_y) >= 60:
+                    for i in block_group_list:
+                        i.rect.y += 3
+                    score += 3
+                elif abs(ref.rect.y - dest_y) >= 28:
+                    for i in block_group_list:
+                        i.rect.y += 2
+                    score += 2
+                else:
+                    for i in block_group_list:
+                        i.rect.y += 1
+                    score += 1
             else:
                 jumping = False
-                
         else:
             if jumping == False:
                 running = False
