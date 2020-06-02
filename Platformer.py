@@ -96,6 +96,8 @@ def main():
     tab_exit = False #checks to see if the player exited the while loop by dying or hitting the exit button
 
     can_move = False #ensures that the player can't move before hitting the first platform
+    
+    fall_y = ref.rect.y
 
     while running:
         for event in pg.event.get():
@@ -104,10 +106,12 @@ def main():
                 tab_exit = True
         keys = pg.key.get_pressed()
         on_ground = False
+
         for i in block_group_list:
             if abs(player.rect.x - i.rect.x) <= 20 and abs(player.rect.y - i.rect.y) <= 25:
                 can_move = True
                 falling = False
+                fall_y = ref.rect.y
                 if ref.rect.y == dest_y:
                     jumping = False
                 for a in block_group_list:
@@ -130,14 +134,30 @@ def main():
         block_list.draw(screen)
         
         if falling == True and jumping == False:
-            for i in block_group_list:
-                i.rect.y -= 4
-                dest_y = ref.rect.y
-            score -= 4
-            
+            if abs(ref.rect.y - fall_y) < 10:
+                for i in block_group_list:
+                    i.rect.y -= 1
+                    dest_y = ref.rect.y
+                score -= 1
+            elif abs(ref.rect.y - fall_y) < 60:
+                for i in block_group_list:
+                    i.rect.y -= 2
+                    dest_y = ref.rect.y
+                score -= 2
+            elif abs(ref.rect.y - fall_y) < 90:
+                for i in block_group_list:
+                    i.rect.y -= 3
+                    dest_y = ref.rect.y
+                score -= 3
+            else:
+                for i in block_group_list:
+                    i.rect.y -= 4
+                    dest_y = ref.rect.y
+                score -= 4
 
         if len(block_group_list) != 0:
             if ref.rect.y != dest_y:
+                fall_y = dest_y
                 if abs(ref.rect.y - dest_y) >= 120:
                     for i in block_group_list:
                         i.rect.y += 4
@@ -146,7 +166,7 @@ def main():
                     for i in block_group_list:
                         i.rect.y += 3
                     score += 3
-                elif abs(ref.rect.y - dest_y) >= 28:
+                elif abs(ref.rect.y - dest_y) >= 10:
                     for i in block_group_list:
                         i.rect.y += 2
                     score += 2
@@ -163,7 +183,7 @@ def main():
         if score > high_score:
             high_score = score
 
-        if abs(score - high_score) > 300:
+        if abs(score - high_score) > 500:
             running = False
             break
 
