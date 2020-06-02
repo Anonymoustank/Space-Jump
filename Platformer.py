@@ -2,7 +2,7 @@
 def main():
 
     import pygame as pg
-    from random import randint
+    from random import randint, choice
     GREEN = (20, 255, 140)
     GREY = (210, 210 ,210)
     WHITE = (255, 255, 255)
@@ -54,13 +54,16 @@ def main():
 
     block_list = pg.sprite.Group()
 
+    moving_block_list = []
+
     for i in range(1, 6):
         exec("enemy_%s = Player(PURPLE, 25, 5)" % i)
+        exec("enemy_%s_speed = 0" % i, globals())
         if i != 1:
             exec("enemy_%s.rect.x = randint(0, 450)" % i)
         else:
             exec("enemy_%s.rect.x = 225" % i)
-        exec("enemy_%s.rect.y = %s * 100" %(i, i))
+        exec("enemy_%s.rect.y = 600 - (%s * 100)" %(i, i))
         exec("block_list.add(enemy_%s)" % i)
         exec("block_group_list.append(enemy_%s)" % i)
 
@@ -106,15 +109,31 @@ def main():
             
         on_ground = False
 
-        for i in block_group_list:
+        for a, i in enumerate(block_group_list):
             if abs(player.rect.x - i.rect.x) <= 30 and abs(player.rect.bottom - i.rect.top) <= 5 and falling == True and jumping == False:
                 can_move = True
                 falling = False
                 fall_y = ref.rect.y
                 if ref.rect.y == dest_y:
                     jumping = False
-                i.rect.y = i.rect.y - 360
-                i.rect.x = randint(0, 450)
+                if randint(0, 10) != 5:
+                    if i in moving_block_list:
+                        moving_block_list.remove(i)
+                        exec("enemy_%s_speed = 0" % (a + 1), globals())
+                    i.rect.y = i.rect.y - 500
+                    i.rect.x = randint(0, 450)
+                else:
+                    i.rect.y = i.rect.y - 500
+                    i.rect.x = randint(100, 350)
+                    if i in moving_block_list:
+                        moving_block_list.remove(i)
+                    if randint(1, 2) == 1:
+                        moving_block_list.append(i)
+                        exec("enemy_%s_speed = -4" % (a + 1), globals())
+                    else:
+                        moving_block_list.append(i)
+                        exec("enemy_%s_speed = 4" % (a + 1), globals())
+
                 dest_y = ref.rect.y + 360
                 if jumping == False and falling == False:
                     jumping = True
@@ -123,14 +142,47 @@ def main():
             else:
                 if on_ground == False:
                     falling = True
+
             if i.rect.y > HEIGHT and i != ref:
-                i.rect.y = i.rect.y - 550
-                i.rect.x = randint(0, 450)
+                if randint(5, 6) != 5:
+                    if i in moving_block_list:
+                        moving_block_list.remove(i)
+                        exec("enemy_%s_speed = 0" % (a + 1), globals())
+                    i.rect.y = i.rect.y - 500
+                    i.rect.x = randint(0, 450)
+                else:
+                    i.rect.y = i.rect.y - 500
+                    i.rect.x = randint(100, 350)
+                    if i in moving_block_list:
+                        moving_block_list.remove(i)
+                    if randint(1, 2) == 1:
+                        moving_block_list.append(i)
+                        exec("enemy_%s_speed = -4" % (a + 1), globals())
+                    else:
+                        moving_block_list.append(i)
+                        exec("enemy_%s_speed = 4" % (a + 1), globals())
+        
         screen.fill(BLACK)
         screen.blit(BackGround.image, BackGround.rect)
 
         sprite_list.draw(screen)
         block_list.draw(screen)
+
+        for a, i in enumerate(moving_block_list):
+            if i != ref:
+                if i.rect.x >= 485:
+                    exec("enemy_%s_speed = -4" % (a + 1), globals())
+                elif i.rect.x <= 25:
+                    exec("enemy_%s_speed = 4" % (a + 1), globals())
+                exec("speed = enemy_%s_speed" % (a + 1), globals())
+                i.rect.x += speed
+            
+        screen.fill(BLACK)
+        screen.blit(BackGround.image, BackGround.rect)
+
+        sprite_list.draw(screen)
+        block_list.draw(screen)
+
         
         if falling == True and jumping == False:
             if abs(ref.rect.y - fall_y) < 10:
