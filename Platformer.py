@@ -91,8 +91,6 @@ def main():
 
     BackGround = Background('space.jpg', [0,0])
 
-    highest_num = 0
-
     tab_exit = False #checks to see if the player exited the while loop by dying or hitting the exit button
 
     can_move = False #ensures that the player can't move before hitting the first platform
@@ -105,6 +103,10 @@ def main():
                 running = False
                 tab_exit = True
         keys = pg.key.get_pressed()
+
+        if keys[pg.K_r]:
+            main()
+            
         on_ground = False
 
         for i in block_group_list:
@@ -114,10 +116,7 @@ def main():
                 fall_y = ref.rect.y
                 if ref.rect.y == dest_y:
                     jumping = False
-                for a in block_group_list:
-                    if a.rect.y > highest_num:
-                        highest_num = a.rect.y
-                i.rect.y = highest_num - 240
+                i.rect.y = i.rect.y - 360
                 i.rect.x = randint(0, 450)
                 dest_y = ref.rect.y + 360
                 if jumping == False and falling == False:
@@ -198,9 +197,9 @@ def main():
 
         if can_move == True:
             if keys[pg.K_LEFT] or keys[pg.K_a]:
-                player.rect.x -= 10
+                player.rect.x -= 8
             if keys[pg.K_RIGHT] or keys[pg.K_d]:
-                player.rect.x += 10
+                player.rect.x += 8
 
         if player.rect.left > WIDTH:
             player.rect.right = 0
