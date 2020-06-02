@@ -72,6 +72,7 @@ def main():
     ref.rect.y = 100
     block_list.add(ref)
     block_group_list.append(ref)
+    enemy_6_speed = 0
 
     sprite_list = pg.sprite.Group()
 
@@ -110,6 +111,7 @@ def main():
         on_ground = False
 
         for a, i in enumerate(block_group_list):
+            print(a + 1)
             if abs(player.rect.x - i.rect.x) <= 30 and abs(player.rect.bottom - i.rect.top) <= 5 and falling == True and jumping == False:
                 can_move = True
                 falling = False
