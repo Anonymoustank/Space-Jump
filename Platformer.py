@@ -58,7 +58,7 @@ def main():
 
     enemy_1 = Player(PURPLE, 25, 5)
     enemy_1.rect.x = 290
-    enemy_1.rect.y = 100
+    enemy_1.rect.y = 450
 
     block_list = pg.sprite.Group()
     block_list.add(enemy)
@@ -110,7 +110,8 @@ def main():
         on_ground = False
 
         for i in block_group_list:
-            if abs(player.rect.x - i.rect.x) <= 20 and abs(player.rect.y - i.rect.y) <= 25:
+            if abs(player.rect.x - i.rect.x) <= 30 and abs(player.rect.bottom - i.rect.top) <= 5 and falling == True and jumping == False:
+                print(jumping)
                 can_move = True
                 falling = False
                 fall_y = ref.rect.y
@@ -126,6 +127,9 @@ def main():
             else:
                 if on_ground == False:
                     falling = True
+            if i.rect.y > HEIGHT and i != ref:
+                i.rect.y = i.rect.y - 550
+                i.rect.x = randint(0, 450)
         screen.fill(BLACK)
         screen.blit(BackGround.image, BackGround.rect)
 
