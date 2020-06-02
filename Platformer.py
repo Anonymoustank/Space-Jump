@@ -49,23 +49,20 @@ def main():
     block_group_list = []
 
     player = Player(GREEN, 25, 25)
-    enemy = Player(PURPLE, 25, 5)
-    enemy.rect.x = 225
-    enemy.rect.y = 400
-
     player.rect.x = 225
     player.rect.y = 250
 
-    enemy_1 = Player(PURPLE, 25, 5)
-    enemy_1.rect.x = 290
-    enemy_1.rect.y = 450
-
     block_list = pg.sprite.Group()
-    block_list.add(enemy)
-    block_list.add(enemy_1)
 
-    block_group_list.append(enemy)
-    block_group_list.append(enemy_1)
+    for i in range(1, 6):
+        exec("enemy_%s = Player(PURPLE, 25, 5)" % i)
+        if i != 1:
+            exec("enemy_%s.rect.x = randint(0, 450)" % i)
+        else:
+            exec("enemy_%s.rect.x = 225" % i)
+        exec("enemy_%s.rect.y = %s * 100" %(i, i))
+        exec("block_list.add(enemy_%s)" % i)
+        exec("block_group_list.append(enemy_%s)" % i)
 
     ref = Player(GREEN, 25, 5)
     ref.rect.x = 700
@@ -111,7 +108,6 @@ def main():
 
         for i in block_group_list:
             if abs(player.rect.x - i.rect.x) <= 30 and abs(player.rect.bottom - i.rect.top) <= 5 and falling == True and jumping == False:
-                print(jumping)
                 can_move = True
                 falling = False
                 fall_y = ref.rect.y
