@@ -14,7 +14,7 @@ def main():
     WIDTH = 500
     HEIGHT = 500
     screen = pg.display.set_mode((WIDTH, HEIGHT))
-    pg.display.set_caption("Game")
+    pg.display.set_caption("Space Jump")
 
     myfont = pg.font.SysFont('verdana', 25)
 
@@ -67,12 +67,17 @@ def main():
         exec("block_list.add(enemy_%s)" % i)
         exec("block_group_list.append(enemy_%s)" % i)
 
-    ref = Player(GREEN, 25, 5)
+    ref = Player(GREEN, 25, 5) #reference block for distances jumped and fallen
     ref.rect.x = 700
     ref.rect.y = 100
     block_list.add(ref)
     block_group_list.append(ref)
-    enemy_6_speed = 0
+
+    jump_block = Player(GREEN, 25, 5) #trampoline block
+    jump_block.rect.x = -200
+    jump_block.rect.y = 100
+    block_list.add(jump_block)
+    block_group_list.append(jump_block)
 
     sprite_list = pg.sprite.Group()
 
@@ -98,6 +103,8 @@ def main():
     
     fall_y = ref.rect.y
 
+    jump_in_screen = False #is the trampoline on screen?
+
     while running:
         for event in pg.event.get():
             if event.type == pg.QUIT:
@@ -111,10 +118,14 @@ def main():
         on_ground = False
 
         for a, i in enumerate(block_group_list):
-            if abs(player.rect.x - i.rect.x) <= 30 and abs(player.rect.bottom - i.rect.top) <= 5 and falling == True and jumping == False and i != ref:
+            if abs(player.rect.x - i.rect.x) <= 30 and abs(player.rect.bottom - i.rect.top) <= 5 and falling == True and jumping == False and i != ref and i != jump_block:
                 can_move = True
                 falling = False
                 fall_y = ref.rect.y
+                if randint(1,1) == 1 and jump_in_screen == False:
+                    jump_block.rect.x = randint(0, 450)
+                    jump_block.rect.y = -50
+                    jump_in_screen = True
                 if ref.rect.y == dest_y:
                     jumping = False
                 if randint(3, 6) != 5 and len(moving_block_list) < 2:
@@ -144,7 +155,21 @@ def main():
                 if on_ground == False:
                     falling = True
 
-            if i.rect.y > HEIGHT - 10 and i != ref:
+            if i == jump_block and abs(player.rect.x - i.rect.x) <= 30 and abs(player.rect.bottom - i.rect.top) <= 5 and falling == True and jumping == False and i != ref:
+                can_move = True
+                falling = False
+                jump_in_screen = False
+                fall_y = ref.rect.y
+                if ref.rect.y == dest_y:
+                    jumping = False
+                dest_y = ref.rect.y + 1080
+                i.rect.x = -300
+                if jumping == False and falling == False:
+                    jumping = True
+                on_ground = True
+                break
+
+            if i.rect.y > HEIGHT - 10 and i != ref and i != jump_block:
                 if randint(3, 6) != 5 and len(moving_block_list) < 2:
                     i.rect.y = i.rect.y - 500
                     i.rect.x = randint(0, 450)
@@ -162,6 +187,10 @@ def main():
                     else:
                         moving_block_list[a] = i
                         exec("enemy_%s_speed = 4" % (a + 1), globals())
+
+            elif i.rect.y > HEIGHT - 10 and i != ref and i == jump_block:
+                i.rect.x = -300
+                jump_in_screen = False
         
         
         for a, i in enumerate(moving_block_list):
@@ -198,15 +227,23 @@ def main():
         if len(block_group_list) != 0:
             if ref.rect.y != dest_y:
                 fall_y = dest_y
-                if abs(ref.rect.y - dest_y) >= 120:
+                if abs(ref.rect.y - dest_y) >= 960:
+                    for i in block_group_list:
+                        i.rect.y += 6
+                    score += 6
+                if abs(ref.rect.y - dest_y) >= 480:
+                    for i in block_group_list:
+                        i.rect.y += 5
+                    score += 5
+                if abs(ref.rect.y - dest_y) >= 400:
                     for i in block_group_list:
                         i.rect.y += 4
                     score += 4
-                elif abs(ref.rect.y - dest_y) >= 60:
+                if abs(ref.rect.y - dest_y) >= 120:
                     for i in block_group_list:
                         i.rect.y += 3
                     score += 3
-                elif abs(ref.rect.y - dest_y) >= 10:
+                elif abs(ref.rect.y - dest_y) >= 20:
                     for i in block_group_list:
                         i.rect.y += 2
                     score += 2
