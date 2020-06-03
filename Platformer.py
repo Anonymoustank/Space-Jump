@@ -54,7 +54,7 @@ def main():
 
     block_list = pg.sprite.Group()
 
-    moving_block_list = [None, None, None, None, None]
+    moving_block_list = [None, None, None, None, None, None, None]
 
     for i in range(1, 6):
         exec("enemy_%s = Player(PURPLE, 25, 5)" % i)
@@ -67,17 +67,17 @@ def main():
         exec("block_list.add(enemy_%s)" % i)
         exec("block_group_list.append(enemy_%s)" % i)
 
-    ref = Player(GREEN, 25, 5) #reference block for distances jumped and fallen
-    ref.rect.x = 700
-    ref.rect.y = 100
-    block_list.add(ref)
-    block_group_list.append(ref)
-
     jump_block = Player(GREEN, 25, 5) #trampoline block
     jump_block.rect.x = -200
     jump_block.rect.y = 100
     block_list.add(jump_block)
     block_group_list.append(jump_block)
+
+    ref = Player(GREEN, 25, 5) #reference block for distances jumped and fallen
+    ref.rect.x = 700
+    ref.rect.y = 100
+    block_list.add(ref)
+    block_group_list.append(ref)
 
     sprite_list = pg.sprite.Group()
 
@@ -103,7 +103,7 @@ def main():
     
     fall_y = ref.rect.y
 
-    jump_in_screen = False #is the trampoline on screen?
+    jump_in_screen = False #checks if the trampoline is on screen
 
     while running:
         for event in pg.event.get():
@@ -126,6 +126,11 @@ def main():
                     jump_block.rect.x = randint(0, 450)
                     jump_block.rect.y = -50
                     jump_in_screen = True
+                    global enemy_6_speed
+                    if randint(1, 2) == 1:
+                        enemy_6_speed = -4
+                    else:
+                        enemy_6_speed = 4
                 if ref.rect.y == dest_y:
                     jumping = False
                 if randint(3, 6) != 5 and len(moving_block_list) < 2:
@@ -155,8 +160,13 @@ def main():
                 if on_ground == False:
                     falling = True
 
+            if i == jump_block and jump_in_screen == True:
+                moving_block_list[a] = i
+
             if i == jump_block and abs(player.rect.x - i.rect.x) <= 30 and abs(player.rect.bottom - i.rect.top) <= 5 and falling == True and jumping == False and i != ref:
                 can_move = True
+                moving_block_list[a] = None
+                exec("enemy_%s_speed = 0" % (a + 1), globals())
                 falling = False
                 jump_in_screen = False
                 fall_y = ref.rect.y
@@ -190,6 +200,7 @@ def main():
 
             elif i.rect.y > HEIGHT - 10 and i != ref and i == jump_block:
                 i.rect.x = -300
+                moving_block_list[a] = None
                 jump_in_screen = False
         
         
