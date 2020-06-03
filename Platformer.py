@@ -54,7 +54,7 @@ def main():
 
     block_list = pg.sprite.Group()
 
-    moving_block_list = []
+    moving_block_list = [None, None, None, None, None]
 
     for i in range(1, 6):
         exec("enemy_%s = Player(PURPLE, 25, 5)" % i)
@@ -117,22 +117,22 @@ def main():
                 fall_y = ref.rect.y
                 if ref.rect.y == dest_y:
                     jumping = False
-                if randint(0, 10) != 5 and len(moving_block_list) < 2:
+                if randint(3, 6) != 5 and len(moving_block_list) < 2:
                     i.rect.y = i.rect.y - 500
                     i.rect.x = randint(0, 450)
                     if i in moving_block_list:
-                        moving_block_list.remove(i)
+                        moving_block_list[a] = None
                         exec("enemy_%s_speed = 0" % (a + 1), globals())
                 else:
                     i.rect.y = i.rect.y - 500
                     i.rect.x = randint(100, 350)
                     if i in moving_block_list:
-                        moving_block_list.remove(i)
+                        moving_block_list[a] = None
                     if randint(1, 2) == 1:
-                        moving_block_list.append(i)
+                        moving_block_list[a] = i
                         exec("enemy_%s_speed = -4" % (a + 1), globals())
                     else:
-                        moving_block_list.append(i)
+                        moving_block_list[a] = i
                         exec("enemy_%s_speed = 4" % (a + 1), globals())
 
                 dest_y = ref.rect.y + 360
@@ -144,30 +144,28 @@ def main():
                 if on_ground == False:
                     falling = True
 
-            if i.rect.y > HEIGHT - 50 and i != ref:
-                if randint(0, 10) != 5 and len(moving_block_list) < 2:
+            if i.rect.y > HEIGHT - 10 and i != ref:
+                if randint(3, 6) != 5 and len(moving_block_list) < 2:
                     i.rect.y = i.rect.y - 500
                     i.rect.x = randint(0, 450)
                     if i in moving_block_list:
-                        moving_block_list.remove(i)
+                        moving_block_list[a] = None
                         exec("enemy_%s_speed = 0" % (a + 1), globals())
                 else:
                     i.rect.y = i.rect.y - 500
                     i.rect.x = randint(100, 350)
                     if i in moving_block_list:
-                        moving_block_list.remove(i)
+                        moving_block_list[a] = None
                     if randint(1, 2) == 1:
-                        moving_block_list.append(i)
+                        moving_block_list[a] = i
                         exec("enemy_%s_speed = -4" % (a + 1), globals())
                     else:
-                        moving_block_list.append(i)
+                        moving_block_list[a] = i
                         exec("enemy_%s_speed = 4" % (a + 1), globals())
-        if len(moving_block_list) > 2:
-            while len(moving_block_list) != 1:
-                moving_block_list.pop(1) 
+        
         
         for a, i in enumerate(moving_block_list):
-            if i != ref:
+            if i != ref and i != None:
                 if i.rect.x >= 485:
                     exec("enemy_%s_speed = -4" % (a + 1), globals())
                 elif i.rect.x <= 25:
@@ -197,10 +195,6 @@ def main():
                     dest_y = ref.rect.y
                 score -= 4
 
-        if len(moving_block_list) > 2:
-            while len(moving_block_list) != 1:
-                moving_block_list.pop(1) 
-
         if len(block_group_list) != 0:
             if ref.rect.y != dest_y:
                 fall_y = dest_y
@@ -229,9 +223,6 @@ def main():
         if score > high_score:
             high_score = score
         
-        if len(moving_block_list) > 2:
-            while len(moving_block_list) != 1:
-                moving_block_list.pop(1) 
 
         if abs(score - high_score) > 500:
             running = False
