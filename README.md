@@ -1,3 +1,2 @@
 # Space Jump
-Based off of doodle jump
-Written in Python 3
+Based Off of Doodle Jump and Written in Python 3
