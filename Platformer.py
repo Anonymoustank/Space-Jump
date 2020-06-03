@@ -63,7 +63,7 @@ def main():
             exec("enemy_%s.rect.x = randint(0, 450)" % i)
         else:
             exec("enemy_%s.rect.x = 225" % i)
-        exec("enemy_%s.rect.y = 600 - (%s * 100)" %(i, i))
+        exec("enemy_%s.rect.y = 600 - (%s * 150)" %(i, i))
         exec("block_list.add(enemy_%s)" % i)
         exec("block_group_list.append(enemy_%s)" % i)
 
@@ -111,19 +111,18 @@ def main():
         on_ground = False
 
         for a, i in enumerate(block_group_list):
-            print(a + 1)
-            if abs(player.rect.x - i.rect.x) <= 30 and abs(player.rect.bottom - i.rect.top) <= 5 and falling == True and jumping == False:
+            if abs(player.rect.x - i.rect.x) <= 30 and abs(player.rect.bottom - i.rect.top) <= 5 and falling == True and jumping == False and i != ref:
                 can_move = True
                 falling = False
                 fall_y = ref.rect.y
                 if ref.rect.y == dest_y:
                     jumping = False
-                if randint(0, 10) != 5:
+                if randint(0, 10) != 5 and len(moving_block_list) < 2:
+                    i.rect.y = i.rect.y - 500
+                    i.rect.x = randint(0, 450)
                     if i in moving_block_list:
                         moving_block_list.remove(i)
                         exec("enemy_%s_speed = 0" % (a + 1), globals())
-                    i.rect.y = i.rect.y - 500
-                    i.rect.x = randint(0, 450)
                 else:
                     i.rect.y = i.rect.y - 500
                     i.rect.x = randint(100, 350)
@@ -145,13 +144,13 @@ def main():
                 if on_ground == False:
                     falling = True
 
-            if i.rect.y > HEIGHT and i != ref:
-                if randint(5, 6) != 5:
+            if i.rect.y > HEIGHT - 50 and i != ref:
+                if randint(0, 10) != 5 and len(moving_block_list) < 2:
+                    i.rect.y = i.rect.y - 500
+                    i.rect.x = randint(0, 450)
                     if i in moving_block_list:
                         moving_block_list.remove(i)
                         exec("enemy_%s_speed = 0" % (a + 1), globals())
-                    i.rect.y = i.rect.y - 500
-                    i.rect.x = randint(0, 450)
                 else:
                     i.rect.y = i.rect.y - 500
                     i.rect.x = randint(100, 350)
@@ -163,13 +162,10 @@ def main():
                     else:
                         moving_block_list.append(i)
                         exec("enemy_%s_speed = 4" % (a + 1), globals())
+        if len(moving_block_list) > 2:
+            while len(moving_block_list) != 1:
+                moving_block_list.pop(1) 
         
-        screen.fill(BLACK)
-        screen.blit(BackGround.image, BackGround.rect)
-
-        sprite_list.draw(screen)
-        block_list.draw(screen)
-
         for a, i in enumerate(moving_block_list):
             if i != ref:
                 if i.rect.x >= 485:
@@ -178,14 +174,7 @@ def main():
                     exec("enemy_%s_speed = 4" % (a + 1), globals())
                 exec("speed = enemy_%s_speed" % (a + 1), globals())
                 i.rect.x += speed
-            
-        screen.fill(BLACK)
-        screen.blit(BackGround.image, BackGround.rect)
 
-        sprite_list.draw(screen)
-        block_list.draw(screen)
-
-        
         if falling == True and jumping == False:
             if abs(ref.rect.y - fall_y) < 10:
                 for i in block_group_list:
@@ -207,6 +196,10 @@ def main():
                     i.rect.y -= 4
                     dest_y = ref.rect.y
                 score -= 4
+
+        if len(moving_block_list) > 2:
+            while len(moving_block_list) != 1:
+                moving_block_list.pop(1) 
 
         if len(block_group_list) != 0:
             if ref.rect.y != dest_y:
@@ -235,6 +228,10 @@ def main():
         
         if score > high_score:
             high_score = score
+        
+        if len(moving_block_list) > 2:
+            while len(moving_block_list) != 1:
+                moving_block_list.pop(1) 
 
         if abs(score - high_score) > 500:
             running = False
