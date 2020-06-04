@@ -122,7 +122,7 @@ def main():
                 can_move = True
                 falling = False
                 fall_y = ref.rect.y
-                if randint(1,1) == 1 and jump_in_screen == False:
+                if randint(1,10) == 1 and jump_in_screen == False:
                     jump_block.rect.x = randint(0, 450)
                     jump_block.rect.y = -50
                     jump_in_screen = True
@@ -133,7 +133,7 @@ def main():
                         enemy_6_speed = 4
                 if ref.rect.y == dest_y:
                     jumping = False
-                if randint(3, 6) != 5 and len(moving_block_list) < 2:
+                if randint(3, 6) != 5:
                     i.rect.y = i.rect.y - 500
                     i.rect.x = randint(0, 450)
                     if i in moving_block_list:
@@ -180,7 +180,7 @@ def main():
                 break
 
             if i.rect.y > HEIGHT - 10 and i != ref and i != jump_block:
-                if randint(3, 6) != 5 and len(moving_block_list) < 2:
+                if randint(3, 6) != 5:
                     i.rect.y = i.rect.y - 500
                     i.rect.x = randint(0, 450)
                     if i in moving_block_list:
