@@ -184,7 +184,7 @@ def main():
             if i == death_block and death_in_screen == True:
                 moving_block_list[a] = i
 
-            if i == death_block and abs(player.rect.x - i.rect.x) <= 30 and abs(player.rect.y - i.rect.y) <= 30 and super_jump == False:
+            if i == death_block and abs(player.rect.x - i.rect.x) <= 30 and abs(player.rect.y - i.rect.y) <= 20 and super_jump == False:
                 for x in block_group_list:
                     if x != death_block:
                         x.kill()
@@ -365,8 +365,10 @@ def main():
         while running:
             keys = pg.key.get_pressed()
             for event in pg.event.get():
-                if event.type==pg.QUIT:
-                    running=False
+                if event.type == pg.QUIT:
+                    running = False
+            if keys[pg.K_q]:
+                running = False
             if keys[pg.K_r]:
                 main()
     pg.quit()
