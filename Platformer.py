@@ -140,7 +140,7 @@ def main():
                         enemy_6_speed = -4
                     else:
                         enemy_6_speed = 4
-                if randint(1,10) == 1 and death_in_screen == False:
+                if randint(1,1) == 1 and death_in_screen == False:
                     death_block.rect.x = randint(0, 450)
                     death_block.rect.y = -50
                     death_in_screen = True
@@ -185,6 +185,9 @@ def main():
                 moving_block_list[a] = i
 
             if i == death_block and abs(player.rect.x - i.rect.x) <= 30 and abs(player.rect.y - i.rect.y) <= 30 and super_jump == False:
+                for x in block_group_list:
+                    if x != death_block:
+                        x.kill()
                 running = False
                 tab_exit = False
 
