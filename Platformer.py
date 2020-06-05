@@ -1,6 +1,5 @@
 
 def main():
-
     import pygame as pg
     from random import randint, choice
     GREEN = (20, 255, 140)
@@ -73,6 +72,12 @@ def main():
     block_list.add(jump_block)
     block_group_list.append(jump_block)
 
+    death_block = Player(RED, 25, 5) #lava block, kills you instantly
+    death_block.rect.x = -200
+    death_block.rect.y = 150
+    block_list.add(death_block)
+    block_group_list.append(death_block)
+
     ref = Player(GREEN, 25, 5) #reference block for distances jumped and fallen
     ref.rect.x = 700
     ref.rect.y = 100
@@ -105,6 +110,10 @@ def main():
 
     jump_in_screen = False #checks if the trampoline is on screen
 
+    death_in_screen = False #checks if death block is on screen
+
+    super_jump = False #checks to see if trampoline block has been hit
+
     while running:
         for event in pg.event.get():
             if event.type == pg.QUIT:
@@ -118,7 +127,7 @@ def main():
         on_ground = False
 
         for a, i in enumerate(block_group_list):
-            if abs(player.rect.x - i.rect.x) <= 30 and abs(player.rect.bottom - i.rect.top) <= 5 and falling == True and jumping == False and i != ref and i != jump_block:
+            if abs(player.rect.x - i.rect.x) <= 30 and abs(player.rect.bottom - i.rect.top) <= 5 and falling == True and jumping == False and i != ref and i != jump_block and i != death_block:
                 can_move = True
                 falling = False
                 fall_y = ref.rect.y
@@ -131,6 +140,15 @@ def main():
                         enemy_6_speed = -4
                     else:
                         enemy_6_speed = 4
+                if randint(1,10) == 1 and death_in_screen == False:
+                    death_block.rect.x = randint(0, 450)
+                    death_block.rect.y = -50
+                    death_in_screen = True
+                    global enemy_7_speed
+                    if randint(1, 2) == 1:
+                        enemy_7_speed = -4
+                    else:
+                        enemy_7_speed = 4
                 if ref.rect.y == dest_y:
                     jumping = False
                 if randint(3, 6) != 5:
@@ -163,8 +181,16 @@ def main():
             if i == jump_block and jump_in_screen == True:
                 moving_block_list[a] = i
 
+            if i == death_block and death_in_screen == True:
+                moving_block_list[a] = i
+
+            if i == death_block and abs(player.rect.x - i.rect.x) <= 30 and abs(player.rect.y - i.rect.y) <= 30 and super_jump == False:
+                running = False
+                tab_exit = False
+
             if i == jump_block and abs(player.rect.x - i.rect.x) <= 30 and abs(player.rect.bottom - i.rect.top) <= 5 and falling == True and jumping == False and i != ref:
                 can_move = True
+                super_jump = True
                 moving_block_list[a] = None
                 exec("enemy_%s_speed = 0" % (a + 1), globals())
                 falling = False
@@ -179,7 +205,7 @@ def main():
                 on_ground = True
                 break
 
-            if i.rect.y > HEIGHT - 10 and i != ref and i != jump_block:
+            if i.rect.y > HEIGHT - 10 and i != ref and i != jump_block and i != death_block:
                 if randint(3, 6) != 5:
                     i.rect.y = i.rect.y - 500
                     i.rect.x = randint(0, 450)
@@ -202,6 +228,11 @@ def main():
                 i.rect.x = -300
                 moving_block_list[a] = None
                 jump_in_screen = False
+
+            elif i.rect.y > HEIGHT - 10 and i == death_block:
+                i.rect.x = -200
+                moving_block_list[a] = None
+                death_in_screen = False
         
         
         for a, i in enumerate(moving_block_list):
@@ -264,6 +295,7 @@ def main():
                     score += 1
             else:
                 jumping = False
+                super_jump = False
         else:
             if jumping == False:
                 running = False
