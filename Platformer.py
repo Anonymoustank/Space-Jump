@@ -140,7 +140,7 @@ def main():
                         enemy_6_speed = -4
                     else:
                         enemy_6_speed = 4
-                if randint(1,1) == 1 and death_in_screen == False:
+                if randint(1,8) == 1 and death_in_screen == False:
                     death_block.rect.x = randint(0, 450)
                     death_block.rect.y = -50
                     death_in_screen = True
