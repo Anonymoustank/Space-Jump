@@ -9,6 +9,8 @@ def main():
     PURPLE = (255, 0, 255)
     BLACK = (0, 0, 0)
 
+    death_speed = 2
+
     pg.init()
     WIDTH = 500
     HEIGHT = 500
@@ -56,7 +58,7 @@ def main():
     moving_block_list = [None, None, None, None, None, None, None]
 
     for i in range(1, 6):
-        exec("enemy_%s = Player(PURPLE, 25, 5)" % i)
+        exec("enemy_%s = Player(PURPLE, 30, 5)" % i)
         exec("enemy_%s_speed = 0" % i, globals())
         if i != 1:
             exec("enemy_%s.rect.x = randint(0, 450)" % i)
@@ -121,13 +123,16 @@ def main():
                 tab_exit = True
         keys = pg.key.get_pressed()
 
+        if keys[pg.K_q]:
+            running = False
+            tab_exit = True
         if keys[pg.K_r]:
             main()
             
         on_ground = False
 
         for a, i in enumerate(block_group_list):
-            if abs(player.rect.x - i.rect.x) <= 30 and abs(player.rect.bottom - i.rect.top) <= 5 and falling == True and jumping == False and i != ref and i != jump_block and i != death_block:
+            if abs(player.rect.x - i.rect.x) <= 35 and abs(player.rect.bottom - i.rect.top) <= 5 and falling == True and jumping == False and i != ref and i != jump_block and i != death_block:
                 can_move = True
                 falling = False
                 fall_y = ref.rect.y
@@ -146,9 +151,9 @@ def main():
                     death_in_screen = True
                     global enemy_7_speed
                     if randint(1, 2) == 1:
-                        enemy_7_speed = -4
+                        enemy_7_speed = -1 * (death_speed + int(high_score/5000))
                     else:
-                        enemy_7_speed = 4
+                        enemy_7_speed = death_speed + int(high_score/5000)
                 if ref.rect.y == dest_y:
                     jumping = False
                 if randint(3, 6) != 5:
@@ -357,9 +362,9 @@ def main():
 
         screen.fill(BLACK)
         textsurface = myfont.render("Final Score: " + str(high_score), True, (WHITE))
-        screen.blit(textsurface, (150, 200))
+        screen.blit(textsurface, (screen.get_width() // 3 - 20, 200))
         restart_prompt = myfont.render("Press r to restart", True, (WHITE))
-        screen.blit(restart_prompt, (145, 300))
+        screen.blit(restart_prompt, (screen.get_width() // 3 - 25, 300))
         pg.display.update()
         running = True
         while running:
