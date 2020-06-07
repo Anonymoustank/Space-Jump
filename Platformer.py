@@ -246,9 +246,9 @@ def main():
         for a, i in enumerate(moving_block_list):
             if i != ref and i != None:
                 if i.rect.x >= 485:
-                    exec("enemy_%s_speed = -4" % (a + 1), globals())
+                    exec("enemy_%s_speed = -1 * enemy_%s_speed" % (a + 1, a + 1), globals())
                 elif i.rect.x <= 25:
-                    exec("enemy_%s_speed = 4" % (a + 1), globals())
+                    exec("enemy_%s_speed = -1 * enemy_%s_speed" % (a + 1, a + 1), globals())
                 exec("speed = enemy_%s_speed" % (a + 1), globals())
                 i.rect.x += speed
 
