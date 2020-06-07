@@ -116,6 +116,8 @@ def main():
 
     super_jump = False #checks to see if trampoline block has been hit
 
+    death_probability = 8
+
     while running:
         for event in pg.event.get():
             if event.type == pg.QUIT:
@@ -142,18 +144,29 @@ def main():
                     jump_in_screen = True
                     global enemy_6_speed
                     if randint(1, 2) == 1:
-                        enemy_6_speed = -4
+                        enemy_6_speed = -6
                     else:
-                        enemy_6_speed = 4
-                if randint(1,8) == 1 and death_in_screen == False:
+                        enemy_6_speed = 6
+                if death_probability - int(high_score/5000) < 2:
+                    death_probability = 2
+                else:
+                    death_probability = death_probability - int(high_score/5000)
+                if randint(1,death_probability) == 1 and death_in_screen == False:
                     death_block.rect.x = randint(0, 450)
                     death_block.rect.y = -50
                     death_in_screen = True
                     global enemy_7_speed
                     if randint(1, 2) == 1:
-                        enemy_7_speed = -1 * (death_speed + int(high_score/5000))
+                        if death_speed + int(high_score/5000) > 6:
+                            enemy_7_speed = -6
+                        else:
+                            enemy_7_speed = -1 * (death_speed + int(high_score/5000))
                     else:
-                        enemy_7_speed = death_speed + int(high_score/5000)
+                        if death_speed + int(high_score/5000) > 6:
+                            enemy_7_speed = 6
+                        else:
+                            enemy_7_speed = death_speed + int(high_score/5000)
+                death_probability = 8
                 if ref.rect.y == dest_y:
                     jumping = False
                 if randint(3, 6) != 5:
