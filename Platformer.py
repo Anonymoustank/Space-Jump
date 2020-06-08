@@ -1,4 +1,3 @@
-
 def main():
     import pygame as pg
     from random import randint, choice
@@ -8,6 +7,8 @@ def main():
     RED = (255, 0, 0)
     PURPLE = (255, 0, 255)
     BLACK = (0, 0, 0)
+
+    move_probability = 8
 
     death_speed = 2
 
@@ -169,7 +170,10 @@ def main():
                 death_probability = 8
                 if ref.rect.y == dest_y:
                     jumping = False
-                if randint(3, 6) != 5:
+                move_probability = 8 - int(high_score/5000)
+                if move_probability < 5:
+                    move_probability = 5
+                if randint(5, move_probability) != 5:
                     i.rect.y = i.rect.y - 500
                     i.rect.x = randint(0, 450)
                     if i in moving_block_list:
@@ -227,7 +231,10 @@ def main():
                 break
 
             if i.rect.y > HEIGHT - 10 and i != ref and i != jump_block and i != death_block:
-                if randint(3, 6) != 5:
+                move_probability = 8 - int(high_score/5000)
+                if move_probability < 5:
+                    move_probability = 5
+                if randint(5, move_probability) != 5:
                     i.rect.y = i.rect.y - 500
                     i.rect.x = randint(0, 450)
                     if i in moving_block_list:
