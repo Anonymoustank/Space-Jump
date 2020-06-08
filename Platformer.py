@@ -10,7 +10,7 @@ def main():
 
     move_probability = 8
 
-    death_speed = 2
+    death_speed = 4
 
     pg.init()
     WIDTH = 500
@@ -174,13 +174,13 @@ def main():
                 if move_probability < 5:
                     move_probability = 5
                 if randint(5, move_probability) != 5:
-                    i.rect.y = i.rect.y - 500
+                    i.rect.y = i.rect.y - 700
                     i.rect.x = randint(0, 450)
                     if i in moving_block_list:
                         moving_block_list[a] = None
                         exec("enemy_%s_speed = 0" % (a + 1), globals())
                 else:
-                    i.rect.y = i.rect.y - 500
+                    i.rect.y = i.rect.y - 700
                     i.rect.x = randint(100, 350)
                     if i in moving_block_list:
                         moving_block_list[a] = None
@@ -235,13 +235,13 @@ def main():
                 if move_probability < 5:
                     move_probability = 5
                 if randint(5, move_probability) != 5:
-                    i.rect.y = i.rect.y - 500
+                    i.rect.y = i.rect.y - 700
                     i.rect.x = randint(0, 450)
                     if i in moving_block_list:
                         moving_block_list[a] = None
                         exec("enemy_%s_speed = 0" % (a + 1), globals())
                 else:
-                    i.rect.y = i.rect.y - 500
+                    i.rect.y = i.rect.y - 700
                     i.rect.x = randint(100, 350)
                     if i in moving_block_list:
                         moving_block_list[a] = None
