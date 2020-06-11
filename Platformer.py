@@ -382,9 +382,13 @@ def main():
 
         screen.fill(BLACK)
         textsurface = myfont.render("Final Score: " + str(high_score), True, (WHITE))
-        screen.blit(textsurface, (screen.get_width() // 3 - 20, 200))
+        textrect = textsurface.get_rect()
+        textrect.center = (screen.get_width() // 2, 200)
+        screen.blit(textsurface, textrect)
         restart_prompt = myfont.render("Press r to restart", True, (WHITE))
-        screen.blit(restart_prompt, (screen.get_width() // 3 - 25, 300))
+        restart_prompt_rect = restart_prompt.get_rect()
+        restart_prompt_rect.center = (screen.get_width() // 2, 300)
+        screen.blit(restart_prompt, restart_prompt_rect)
         pg.display.update()
         running = True
         while running:
