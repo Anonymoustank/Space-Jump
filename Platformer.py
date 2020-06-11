@@ -294,39 +294,36 @@ def main():
                     dest_y = ref.rect.y
                 score -= 4
 
-        if len(block_group_list) != 0:
-            if ref.rect.y != dest_y:
-                fall_y = dest_y
-                if abs(ref.rect.y - dest_y) >= 960:
-                    for i in block_group_list:
-                        i.rect.y += 6
-                    score += 6
-                if abs(ref.rect.y - dest_y) >= 480:
-                    for i in block_group_list:
-                        i.rect.y += 5
-                    score += 5
-                if abs(ref.rect.y - dest_y) >= 400:
-                    for i in block_group_list:
-                        i.rect.y += 4
-                    score += 4
-                if abs(ref.rect.y - dest_y) >= 120:
-                    for i in block_group_list:
-                        i.rect.y += 3
-                    score += 3
-                elif abs(ref.rect.y - dest_y) >= 20:
-                    for i in block_group_list:
-                        i.rect.y += 2
-                    score += 2
-                else:
-                    for i in block_group_list:
-                        i.rect.y += 1
-                    score += 1
+        if ref.rect.y != dest_y:
+            fall_y = dest_y
+            if abs(ref.rect.y - dest_y) >= 960:
+                for i in block_group_list:
+                    i.rect.y += 6
+                score += 6
+            if abs(ref.rect.y - dest_y) >= 480:
+                for i in block_group_list:
+                    i.rect.y += 5
+                score += 5
+            if abs(ref.rect.y - dest_y) >= 400:
+                for i in block_group_list:
+                    i.rect.y += 4
+                score += 4
+            if abs(ref.rect.y - dest_y) >= 120:
+                for i in block_group_list:
+                    i.rect.y += 3
+                score += 3
+            elif abs(ref.rect.y - dest_y) >= 20:
+                for i in block_group_list:
+                    i.rect.y += 2
+                score += 2
             else:
-                jumping = False
-                super_jump = False
+                for i in block_group_list:
+                    i.rect.y += 1
+                score += 1
         else:
-            if jumping == False:
-                running = False
+            jumping = False
+            super_jump = False
+        
         
         if score > high_score:
             high_score = score
