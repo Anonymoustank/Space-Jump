@@ -140,7 +140,7 @@ def main():
                 falling = False
                 fall_y = ref.rect.y
                 if randint(1,10) == 1 and jump_in_screen == False:
-                    jump_block.rect.x = randint(0, 450)
+                    jump_block.rect.x = randint(50, 400)
                     jump_block.rect.y = -50
                     jump_in_screen = True
                     global enemy_6_speed
